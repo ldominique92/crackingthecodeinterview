@@ -1,9 +1,9 @@
-public class Solution {  
-    public string FractionToDecimal(int numerator, int denominator) {
+class Solution {  
+    public String fractionToDecimal(int numerator, int denominator) {
         float quocient = numerator/denominator;
         
-        if(isRecurring(quocient)) {
-            return formatRecurringDecimal(numerator, denominator);
+        if(isRecurring(numerator, denominator)) {
+            return formatRecurringDecimal(quocient);
         }
         else {
             return Float.toString(quocient);
@@ -27,8 +27,8 @@ public class Solution {
     
     private String formatRecurringDecimal(float number) {
         String nonFormated = Float.toString(number);
-        String formated = nonFormated.split('.')[0];
-        String tail = nonFormated.split('.')[1];
+        String formated = nonFormated.split(".")[0];
+        String tail = nonFormated.split(".")[1];
         
         int longestPeriod = 1;
         int tailSize = tail.length();
@@ -39,13 +39,14 @@ public class Solution {
             String testDecimalPart = tail.substring(0, testPeriod);
             
             String testTail = generateRecurringNumber(testDecimalPart, maxRepetitions);
-            if(testTail != tail.substring(0, testPeriod*maxRepetions))
+            if(testTail != tail.substring(0, testPeriod*maxRepetitions))
                 break;
             
             longestPeriod = testPeriod;
         }
         
         formated += "(" + tail.substring(0, longestPeriod) + ")";
+        return formated;
     }
     
     private String generateRecurringNumber(String part, int repetitions) {
