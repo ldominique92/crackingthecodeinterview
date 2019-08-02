@@ -1,14 +1,17 @@
 public class Solution {
     public string FractionToDecimal(int numerator, int denominator) {
         decimal quocient = (decimal) numerator / (decimal) denominator;
+        String result = quocient.ToString();
         
-        if(isRecurring(numerator, denominator, quocient)) {
-            return formatRecurringDecimal(quocient);
-        }
-        else {
-            return quocient.ToString();
+        if(!isInteger(quocient) && isRecurring(numerator, denominator, quocient)) {
+            return formatRecurringDecimal(result);
         }
         
+        return result;        
+    }
+    
+    private bool isInteger(decimal d) {
+        return (d % 1) == 0;
     }
     
     private bool isRecurring(int numerator, int denominator, decimal quocient) {
@@ -24,21 +27,18 @@ public class Solution {
         return true;
     }
     
-    private String formatRecurringDecimal(decimal number) {
-        String nonFormated = number.ToString();
+    private String formatRecurringDecimal(String nonFormated) {
         String formated = nonFormated.Split('.')[0];
         String tail = nonFormated.Split('.')[1];
         
         int longestPeriod = 1;
-        int tailSize = tail.Length;
         
-        while(longestPeriod < tailSize) {
+        while(longestPeriod < tail.Length) {
             int testPeriod = longestPeriod + 1;
-            int maxRepetitions = tailSize/testPeriod;
-            String testDecimalPart = tail.Substring(0, testPeriod);
-            
-            String testTail = generateRecurringNumber(testDecimalPart, maxRepetitions);
-            if(testTail != tail.Substring(0, testPeriod*maxRepetitions))
+            int maxRepetitions = tail.Length/testPeriod;
+                        
+            if(generateRecurringNumber(tail, testPeriod, maxRepetitions) 
+               != tail.Substring(0, testPeriod*maxRepetitions))
                 break;
             
             longestPeriod = testPeriod;
@@ -48,7 +48,9 @@ public class Solution {
         return formated;
     }
     
-    private String generateRecurringNumber(String part, int repetitions) {
+    private String generateRecurringNumber(String number, int length, int repetitions) {
+        String part = number.Substring(0, length);
+        Console.WriteLine(part);
         String result = "";
         
         for(int i=0; i<=repetitions; i++) result += part;
